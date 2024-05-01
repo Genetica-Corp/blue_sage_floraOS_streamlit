@@ -6,6 +6,7 @@ import datetime
 import plotly as px
 import plotly.graph_objects as go
 
+st. set_page_config(layout='centered', initial_sidebar_state='expanded')
 
 def run_query(query):
     #with get_snowflake_connection() as conn:
@@ -41,20 +42,6 @@ def load_page():
          'Total Discounts', 'Sales by Payment Type', 'Top Selling Products', 'Revenue by Tax Type'))
     
     if analysis_type == 'Sales by Product':
-        # query = f"""
-        #         SELECT
-        #         p.productname,
-        #         SUM(f.totalprice) AS total_sales
-        #         FROM
-        #         FLORAOS.DRAGON_LILY.FLATTENED_ITEMSV_DRAGONLILY AS f
-        #         JOIN FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS AS t ON f.transactionid = t.transactionid
-        #         JOIN FLORAOS.DRAGON_LILY.ENRICHEDMASTER AS p ON f.productid = p.productid
-        #         {query_date_filter}
-        #         GROUP BY
-        #         p.productname
-        #         ORDER BY total_sales DESC
-        #         limit 10
-        #         """
         
         query = f"""
                 SELECT
@@ -72,7 +59,7 @@ def load_page():
                 p.location
                 ORDER BY
                 total_sales DESC
-                limit 10;
+                limit 5;
 
                 """
         df = run_query(query)
@@ -94,7 +81,7 @@ def load_page():
 
             # Set layout for the chart
         bar_chart.update_layout(
-                #title="Top Selling Products by Total Sales",
+                title="Top Selling Products for Carthage",
                 xaxis_title="Product Name",
                 yaxis_title="Total Sales ($)",
                 xaxis_tickangle=45,  # Rotate x-axis labels by 45 degrees
