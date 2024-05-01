@@ -5,8 +5,9 @@ from snowflake.connector import connect
 import datetime
 import plotly as px
 import plotly.graph_objects as go
+from Functions import *
 
-st. set_page_config(layout='centered', initial_sidebar_state='expanded')
+st. set_page_config(layout='wide', initial_sidebar_state='expanded')
 
 def run_query(query):
     #with get_snowflake_connection() as conn:
@@ -47,7 +48,8 @@ def load_page():
                 SELECT
                 p.productname,
                 p.location,
-                SUM(i.totalprice) AS total_sales
+                SUM(i.totalprice) AS total_sales,
+                COUNT(DISTINCT i.transactionid) AS total_transactions
                 FROM
                 FLORAOS.BLUE_SAGE.flattened_itemsv_blue_sage_04_28_2024 AS i
                 JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
@@ -59,13 +61,14 @@ def load_page():
                 p.location
                 ORDER BY
                 total_sales DESC
-                limit 5;
+                limit 10;
 
                 """
         df = run_query(query)
         st.markdown(f"#### Below you will find the 10 best-selling products :blue[{date_range_text}]")
         #st.bar_chart(df.set_index('PRODUCTNAME')['TOTAL_SALES'])  
-        df["TOTAL_SALES"] = df["TOTAL_SALES"].round(2)  # Round to 2 decimal places
+        #df["TOTAL_SALES"] = df["TOTAL_SALES"].round(2)  # Round to 2 decimal places
+        print(df)
 
         bar_chart = go.Figure(
             data=[
@@ -90,10 +93,17 @@ def load_page():
             )
 
             # Display in Streamlit
-        st.plotly_chart(bar_chart)
+        #st.plotly_chart(bar_chart)
+        popular_sales_markdown = display_popular_products_by_sales(df)
+        popular_transactions_markdown = display_popular_products_by_transactions(df)
+        col = st.columns((2, 2, .5), gap='small')
+        with col[0]:            
+            st.markdown(popular_sales_markdown)
+        with col[1]:
+            st.markdown(popular_transactions_markdown)  # Add an empty markdown placeholder for the second column
 
-        with st.expander("Open to view the data behind the chart"):
-            df["TOTAL_SALES"] = df["TOTAL_SALES"].apply(lambda x: f"${x:.2f}") # Format as currency
-            st.table(df)
+        #with st.expander("Open to view the data behind the chart"):
+         #   df["TOTAL_SALES"] = df["TOTAL_SALES"].apply(lambda x: f"${x:.2f}") # Format as currency
+          #  st.table(df)
 
 load_page()
