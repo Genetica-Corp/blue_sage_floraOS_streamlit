@@ -10,7 +10,7 @@ st.sidebar.write("Navigate through different analytics perspectives:")
 # Multipage setup
 st.markdown("""
 ### Please Select a Dashboard from the Sidebar
-- Sales Analytics
-- Employee Analytics
+- Sales Analytics \n
+- Employee Analytics \n
 - Inventory Analytics
 """)
