@@ -20,7 +20,7 @@ def run_query(query):
 
 
 def load_page():
-    st.title(':blue[Sales Analytics]')
+    st.title(':blue[Product Analytics]')
     # Get today's date
     today = datetime.date.today()
 
