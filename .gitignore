@@ -1,0 +1,6 @@
+# Secrets and sensitive information
+secrets.py
+*.pem
+*.key
+*.crt
+secrets.toml
