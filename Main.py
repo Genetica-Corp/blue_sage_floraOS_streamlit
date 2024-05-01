@@ -12,5 +12,5 @@ st.markdown("""
 ### Please Select a Dashboard from the Sidebar
 - Sales Analytics \n
 - Employee Analytics \n
-- Inventory Analytics
+- Inventory Analytics \n
 """)
