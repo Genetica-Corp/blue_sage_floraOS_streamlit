@@ -68,7 +68,7 @@ def load_page():
         st.markdown(f"#### Below you will find the 10 best-selling products :blue[{date_range_text}]")
         #st.bar_chart(df.set_index('PRODUCTNAME')['TOTAL_SALES'])  
         #df["TOTAL_SALES"] = df["TOTAL_SALES"].round(2)  # Round to 2 decimal places
-        print(df)
+        #print(df)
 
         bar_chart = go.Figure(
             data=[
@@ -92,8 +92,6 @@ def load_page():
                 margin=dict(l=60, r=60, b=100, t=60),  # Adjust margins
             )
 
-            # Display in Streamlit
-        #st.plotly_chart(bar_chart)
         popular_sales_markdown = display_popular_products_by_sales(df)
         popular_transactions_markdown = display_popular_products_by_transactions(df)
         col = st.columns((2, 2, .5), gap='small')

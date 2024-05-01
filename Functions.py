@@ -1,5 +1,4 @@
 import pandas as pd
-import streamlit as st
 
 
 def display_popular_products_by_sales(df):
