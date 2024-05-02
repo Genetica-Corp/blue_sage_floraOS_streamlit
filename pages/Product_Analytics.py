@@ -39,8 +39,13 @@ def load_page():
     st.sidebar.header('Analytics Options')
     analysis_type = st.sidebar.radio(
         "Select Analysis Type",
-        ('Sales by Product', 'Average Sale Amount', 'Transaction Counts',
-         'Total Discounts', 'Sales by Payment Type', 'Top Selling Products', 'Revenue by Tax Type'))
+        ('Sales by Product',
+        'Average Sale Amount')) 
+    #'Transaction Counts','Total Discounts', 'Sales by Payment Type', 'Top Selling Products', 'Revenue by Tax Type'))
+
+    if analysis_type == 'Average Sale Amount':
+        st.markdown(f"#### Below you will find product sale metrics :blue[*{date_range_text}*]")
+
     
     if analysis_type == 'Sales by Product':
         
@@ -68,7 +73,6 @@ def load_page():
         st.markdown(f"#### Below you will find the 10 best-selling products :blue[{date_range_text}]")
         #st.bar_chart(df.set_index('PRODUCTNAME')['TOTAL_SALES'])  
         #df["TOTAL_SALES"] = df["TOTAL_SALES"].round(2)  # Round to 2 decimal places
-        #print(df)
 
         bar_chart = go.Figure(
             data=[
@@ -94,14 +98,37 @@ def load_page():
 
         popular_sales_markdown = display_popular_products_by_sales(df)
         popular_transactions_markdown = display_popular_products_by_transactions(df)
+
+        st.markdown("### Store:  :orange[Carthage]")
         col = st.columns((2, 2, .5), gap='small')
         with col[0]:            
             st.markdown(popular_sales_markdown)
         with col[1]:
-            st.markdown(popular_transactions_markdown)  # Add an empty markdown placeholder for the second column
+            st.markdown(popular_transactions_markdown)
+        
+        with st.expander("If you would like to see the Lebanon data behind the chart"):
+            st.table(df)
+        
 
-        #with st.expander("Open to view the data behind the chart"):
-         #   df["TOTAL_SALES"] = df["TOTAL_SALES"].apply(lambda x: f"${x:.2f}") # Format as currency
-          #  st.table(df)
+        st.markdown("### Store:  :orange[Lebanon]")
+        col = st.columns((2, 2, .5), gap='small')
+        
+
+        df_lebanon = get_Lebanon_data(query_date_filter)
+        with col[0]:
+            st.markdown(display_popular_products_by_sales(df_lebanon))
+        with col[1]:
+            st.markdown(display_popular_products_by_transactions(df_lebanon))
+        
+        with st.expander("If you would like to see the Lebanon data behind the chart"):
+            st.table(df_lebanon)
+
+
+      
 
 load_page()
+
+
+  #with st.expander("Open to view the data behind the chart"):
+         #   df["TOTAL_SALES"] = df["TOTAL_SALES"].apply(lambda x: f"${x:.2f}") # Format as currency
+          #  st.table(df)
