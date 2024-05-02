@@ -6,6 +6,7 @@ import datetime
 import plotly as px
 import plotly.graph_objects as go
 from Functions import *
+import seaborn as sns
 
 st. set_page_config(layout='wide', initial_sidebar_state='expanded')
 
@@ -45,6 +46,37 @@ def load_page():
 
     if analysis_type == 'Average Sale Amount':
         st.markdown(f"#### Below you will find product sale metrics :blue[*{date_range_text}*]")
+
+        df_budtender = get_budtender_transaction_data(query_date_filter)
+        #st.table(df_budtender)
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.markdown("### Average Sale Amount per Budtender")
+
+            # Sort by average sale amount descending for visualization clarity
+            df_sorted_sales = df_budtender.sort_values(by="AVERAGE_SALE_AMOUNT", ascending=False)
+
+            plt.figure(figsize=(10, 5))
+            sns.barplot(data=df_sorted_sales, x="AVERAGE_SALE_AMOUNT", y="BUDTENDER", color="c")
+            plt.xlabel("Average Sale Amount ($)")
+            plt.ylabel("Budtender")
+            plt.title("Average Sale Amount per Budtender")
+            st.pyplot(plt)
+
+        with col2:
+            st.markdown("### Total Transactions per Budtender")
+
+            # Sort by total transactions descending for visualization clarity
+            df_sorted_transactions = df_budtender.sort_values(by="TOTAL_TRANSACTIONS", ascending=False)
+
+            plt.figure(figsize=(10, 5))
+            sns.barplot(data=df_sorted_transactions, x="TOTAL_TRANSACTIONS", y="BUDTENDER", color="m")
+            plt.xlabel("Total Transactions")
+            plt.ylabel("Budtender")
+            plt.title("Total Transactions per Budtender")
+            st.pyplot(plt)
 
     
     if analysis_type == 'Sales by Product':

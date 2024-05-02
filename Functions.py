@@ -70,3 +70,22 @@ def get_Lebanon_data(query_date_filter):
     
     df_lebanon = run_query(query)
     return df_lebanon
+
+def get_budtender_transaction_data(query_date_filter):
+    query = f"""
+                SELECT
+                completedbyuser AS budtender,
+                AVG(total) AS average_sale_amount,
+                COUNT(transactionid) AS total_transactions
+            FROM
+                FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS
+            {query_date_filter}
+            AND NOT ISVOID
+            GROUP BY
+                completedbyuser
+            ORDER BY
+                total_transactions DESC
+            limit 10
+            """
+    df_budtender = run_query(query)
+    return df_budtender
