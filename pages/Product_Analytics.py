@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from snowflake.connector import connect
 import datetime
-import plotly as px
+import plotly.express as px
 import plotly.graph_objects as go
 from Functions import *
 import seaborn as sns
@@ -57,6 +57,7 @@ def load_page():
 
             # Sort by average sale amount descending for visualization clarity
             df_sorted_sales = df_budtender.sort_values(by="AVERAGE_SALE_AMOUNT", ascending=False)
+            df_sorted_sales["AVERAGE_SALE_AMOUNT"] = df_sorted_sales["AVERAGE_SALE_AMOUNT"].apply(lambda x: f"${x:.2f}")
 
             plt.figure(figsize=(10, 5))
             sns.barplot(data=df_sorted_sales, x="AVERAGE_SALE_AMOUNT", y="BUDTENDER", color="c")
@@ -77,6 +78,44 @@ def load_page():
             plt.ylabel("Budtender")
             plt.title("Total Transactions per Budtender")
             st.pyplot(plt)
+
+        
+        
+
+        # Plotly Visualization: Average Sale Amount
+        fig1 = px.bar(
+            df_sorted_sales,
+            x="AVERAGE_SALE_AMOUNT",
+            y="BUDTENDER",
+            title="Average Sale Amount per Budtender",
+            labels={"AVERAGE_SALE_AMOUNT": "Average Sale Amount ($)", "BUDTENDER": "Budtender"},
+            orientation="h",
+            color="AVERAGE_SALE_AMOUNT",
+            color_continuous_scale="Viridis",
+        )
+
+        # Plotly Visualization: Total Transactions
+        fig2 = px.bar(
+            df_sorted_transactions,
+            x="TOTAL_TRANSACTIONS",
+            y="BUDTENDER",
+            title="Total Transactions per Budtender",
+            labels={"TOTAL_TRANSACTIONS": "Total Transactions", "BUDTENDER": "Budtender"},
+            orientation="h",
+            color="TOTAL_TRANSACTIONS",
+            color_continuous_scale="Magma",
+        )
+
+        # Displaying in Streamlit
+        st.markdown("### :blue[Different Scheme] for Average Sale Amount and Total Transactions per Budtender")
+
+        col1, col2 = st.columns(2)
+        col1.plotly_chart(fig1)
+        col2.plotly_chart(fig2)
+
+        #st.plotly_chart(fig1)
+        #st.plotly_chart(fig2)
+
 
     
     if analysis_type == 'Sales by Product':

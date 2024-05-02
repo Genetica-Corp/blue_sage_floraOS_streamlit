@@ -1,6 +1,7 @@
 import pandas as pd
 from snowflake.connector import connect
 import streamlit as st
+import plotly.express as px
 
 def run_query(query):
     conn = st.connection("snowflake")
@@ -89,3 +90,56 @@ def get_budtender_transaction_data(query_date_filter):
             """
     df_budtender = run_query(query)
     return df_budtender
+
+
+def get_weekly_profitability(query_date_filter):
+    query = f"""
+            SELECT 
+                DAYNAME(TRANSACTIONDATE) AS DAY_OF_WEEK,
+                SUM(TOTAL) AS TOTAL_REVENUE,
+                AVG(TOTAL) AS AVERAGE_REVENUE
+            FROM FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS
+            {query_date_filter}
+            GROUP BY DAY_OF_WEEK
+            ORDER BY 
+                CASE 
+                    WHEN DAY_OF_WEEK = 'Monday' THEN 1
+                    WHEN DAY_OF_WEEK = 'Tuesday' THEN 2
+                    WHEN DAY_OF_WEEK = 'Wednesday' THEN 3
+                    WHEN DAY_OF_WEEK = 'Thursday' THEN 4
+                    WHEN DAY_OF_WEEK = 'Friday' THEN 5
+                    WHEN DAY_OF_WEEK = 'Saturday' THEN 6
+                    WHEN DAY_OF_WEEK = 'Sunday' THEN 7
+                    ELSE 8  -- Default value in case there's unexpected day names
+                END
+                """
+    df_weekly_profitability = run_query(query)
+    return df_weekly_profitability
+
+
+def get_customer_sales(query_date_filter):
+    
+    query = f"""
+            SELECT
+                LATITUDE, 
+                LONGITUDE
+            FROM FLORAOS.BLUE_SAGE.MATCHED_CUSTOMERS_ZIPCODES          
+            WHERE LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL
+            """
+    df_customer_sales = run_query(query)
+    return df_customer_sales
+
+
+def render_profitability_visualizations(df_weekly_profitability):
+    # Bar chart for total revenue
+    fig1 = px.bar(
+        df_weekly_profitability,
+        x="DAY_OF_WEEK",
+        y="TOTAL_REVENUE",
+        color="DAY_OF_WEEK",
+        title="Total Revenue by Day of the Week",
+        labels={"DAY_OF_WEEK": "Day of the Week", "TOTAL_REVENUE": "Total Revenue ($)"},
+    )
+    fig1.update_layout(margin=dict(l=60, r=60, t=40, b=80), showlegend=True)
+    return fig1
+
