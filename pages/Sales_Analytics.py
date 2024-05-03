@@ -47,19 +47,6 @@ def load_page():
                 st.markdown('#### The map below shows the :blue[location of customers] based on their home address.')
                 st.map(df_customer_sales[['LATITUDE', 'LONGITUDE']].astype(float))
 
-                
-
-
-
-                
-                   
-        
-
-
-
-
-
-
 
 
 load_page()
