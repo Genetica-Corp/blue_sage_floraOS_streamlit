@@ -3,3 +3,4 @@ secrets.py
 *.pem
 *.key
 *.crt
+secrets.toml
