@@ -5,3 +5,4 @@ secrets.py
 *.crt
 secrets.toml
 *.streamlit
+*.env
