@@ -7,3 +7,4 @@ secrets.toml
 *.streamlit
 *.env
 *.yaml
+*.yml
