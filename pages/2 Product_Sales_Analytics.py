@@ -203,7 +203,7 @@ def load_page():
         def get_Inventory_Aging_data():
             query = """
                     SELECT
-                    LOCATION,
+                    SPLIT_PART (LOCATION, ' - ', 2) AS LOCATION,
                     PRODUCT, CATEGORY, MASTERCATEGORY, CANNABISINVENTORY, 
                     "0-30", "31-60", "61-90", "91-120", "121+" 
                     from floraos.blue_sage.report_inventory_aging_may_7_24
@@ -214,7 +214,15 @@ def load_page():
         df_inventory_aging = get_Inventory_Aging_data()
         st.markdown("### :blue[Inventory Aging]")
         with st.expander("Please expand to see the Inventory Aging data"):
-            st.dataframe(df_inventory_aging)
-            st.write("Inventory Aging data will be displayed here")      
+            st.dataframe(df_inventory_aging.head(10))
+
+
+            df_filtered = df_inventory_aging[df_inventory_aging["CANNABISINVENTORY"]]
+
+            # Further filtering by location if necessary and sorting by 121+ days
+            df_products_with_large_inventory = df_filtered[df_filtered['LOCATION'] == 'Lebanon (SMO5)'].sort_values(by="121+", ascending=False).head(10)
+
+
+            st.dataframe(df_products_with_large_inventory)     
 
 load_page()
