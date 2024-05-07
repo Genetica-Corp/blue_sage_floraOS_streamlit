@@ -6,3 +6,4 @@ secrets.py
 secrets.toml
 *.streamlit
 *.env
+*.yaml
