@@ -9,6 +9,7 @@ def run_query(query):
     cur.execute(query)
     df = cur.fetch_pandas_all()
     return df
+    
 
 
 def display_popular_products_by_sales(df):
@@ -143,3 +144,17 @@ def render_profitability_visualizations(df_weekly_profitability):
     fig1.update_layout(margin=dict(l=60, r=60, t=40, b=80), showlegend=True)
     return fig1
 
+
+
+def get_transaction_data():
+    query = """
+            SELECT
+                CAST(TRANSACTIONDATE AS DATE) AS Transaction_Date,
+                TRANSACTIONID, TOTAL
+                FROM
+                FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS
+            WHERE
+                TRANSACTIONDATE >= CURRENT_DATE - INTERVAL '1 year'
+            """
+    df_transaction_data = run_query(query)
+    return df_transaction_data

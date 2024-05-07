@@ -170,36 +170,51 @@ def load_page():
         popular_sales_markdown = display_popular_products_by_sales(df)
         popular_transactions_markdown = display_popular_products_by_transactions(df)
 
-        st.markdown("### Store:  :orange[Carthage]")
-        col = st.columns((2, 2, .5), gap='small')
-        with col[0]:            
-            st.markdown(popular_sales_markdown)
-        with col[1]:
-            st.markdown(popular_transactions_markdown)
-        
-        with st.expander("If you would like to see the Lebanon data behind the chart"):
-            st.table(df)
-        
-
-        st.markdown("### Store:  :orange[Lebanon]")
-        col = st.columns((2, 2, .5), gap='small')
+        st.markdown("### :orange[Carthage] -  *Sales* and *Transactions* by Product")
+        with st.expander("Please expand to see the Carthage Sales and Product data"):
+            
+            col = st.columns((1, 1, 1), gap='small')
+            with col[0]:            
+                st.markdown(popular_sales_markdown)
+            with col[1]:
+                st.markdown(popular_transactions_markdown)
+            with col[2]:
+                st.dataframe(df)
+            
         
 
-        df_lebanon = get_Lebanon_data(query_date_filter)
-        with col[0]:
-            st.markdown(display_popular_products_by_sales(df_lebanon))
-        with col[1]:
-            st.markdown(display_popular_products_by_transactions(df_lebanon))
+
+        st.markdown("### :orange[Lebanon] -  *Sales* and *Transactions* by Product")
+        with st.expander("Please expand to see the Lebanon Sales and Product data"):
+            
+            col = st.columns((1, 1, 1), gap='small')
+            
+
+            df_lebanon = get_Lebanon_data(query_date_filter)
+            with col[0]:
+                st.markdown(display_popular_products_by_sales(df_lebanon))
+            with col[1]:
+                st.markdown(display_popular_products_by_transactions(df_lebanon))
+            with col[2]:
+                st.dataframe(df)
+
+
+        @st.cache_data
+        def get_Inventory_Aging_data():
+            query = """
+                    SELECT
+                    LOCATION,
+                    PRODUCT, CATEGORY, MASTERCATEGORY, CANNABISINVENTORY, 
+                    "0-30", "31-60", "61-90", "91-120", "121+" 
+                    from floraos.blue_sage.report_inventory_aging_may_7_24
+                                """ 
+            
+            return run_query(query)
         
-        with st.expander("If you would like to see the Lebanon data behind the chart"):
-            st.table(df_lebanon)
-
-
-      
+        df_inventory_aging = get_Inventory_Aging_data()
+        st.markdown("### :blue[Inventory Aging]")
+        with st.expander("Please expand to see the Inventory Aging data"):
+            st.dataframe(df_inventory_aging)
+            st.write("Inventory Aging data will be displayed here")      
 
 load_page()
-
-
-  #with st.expander("Open to view the data behind the chart"):
-         #   df["TOTAL_SALES"] = df["TOTAL_SALES"].apply(lambda x: f"${x:.2f}") # Format as currency
-          #  st.table(df)
