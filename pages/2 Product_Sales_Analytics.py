@@ -220,11 +220,27 @@ def load_page():
             df_filtered = df_inventory_aging[df_inventory_aging["CANNABISINVENTORY"]]
 
             # Further filtering by location if necessary and sorting by 121+ days
-            df_products_with_large_inventory_Lebanon = df_filtered[df_filtered['LOCATION'] == 'Lebanon (SMO5)'].sort_values(by="121+", ascending=False).head(10)
-            df_products_with_large_inventory_Carthage = df_filtered[df_filtered['LOCATION'] == 'Carthage (SMO4)'].sort_values(by="121+", ascending=False).head(10)
+            df_products_with_large_inventory_Lebanon = (
+                df_filtered[
+                (df_filtered['LOCATION'] == 'Lebanon (SMO5)') &  # Filter by location
+                (df_filtered['CATEGORY'] != 'Edibles')            # Exclude 'Edibles' category
+                ]
+                .sort_values(by="121+", ascending=False)  # Sort by '121+' column, descending order
+                .head(10)                                  # Select the top 10
+                )
+            
+
+            df_products_with_large_inventory_Carthage = (
+                df_filtered[
+                (df_filtered['LOCATION'] == 'Carthage (SMO4)') &  # Filter by location
+                (df_filtered['CATEGORY'] == 'Flower')            # Exclude 'Edibles' category
+                ]
+                .sort_values(by="121+", ascending=False)  # Sort by '121+' column, descending order
+                .head(10)                                  # Select the top 10
+                )
 
 
             st.dataframe(df_products_with_large_inventory_Lebanon)
-            st.dataframe(df_products_with_large_inventory_Carthage)     
+            st.dataframe(df_products_with_large_inventory_Carthage)      
 
 load_page()

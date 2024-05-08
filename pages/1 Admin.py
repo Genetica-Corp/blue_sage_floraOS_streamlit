@@ -7,7 +7,8 @@ st.title('FloraOS Analytics Admin Panel 🌿')
 
 
 st.markdown("""### :blue[Store Level Data]""")
-st.metric("Average Weekly Transactions", "$1,000,000")
+st.markdown("""#### Updated Store level data coming soon!""")
+#st.metric("Average Weekly Transactions", "$1,000,000")
 
 data = get_transaction_data()
 # Assuming `data` is the DataFrame obtained from the SQL query
@@ -47,4 +48,4 @@ yearly_data = data.resample("Y").agg(
 
 weekly_data = weekly_data["TOTAL"].mean().round(2)
 
-st.write(weekly_data)
+#st.write(weekly_data)
