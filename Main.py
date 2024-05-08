@@ -11,6 +11,5 @@ st.sidebar.write("Navigate through different analytics perspectives:")
 st.markdown("""
 ### Please Select a Dashboard from the Sidebar
 - Sales Analytics \n
-- Employee Analytics \n
-- Inventory Analytics \n
+- Product Sales Analytics \n
 """)

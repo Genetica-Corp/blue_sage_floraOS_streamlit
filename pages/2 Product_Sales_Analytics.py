@@ -142,6 +142,8 @@ def load_page():
                 """
         df = run_query(query)
         st.markdown(f"#### Below you will find the 10 best-selling products :blue[{date_range_text}]")
+        st.markdown("##### *You can change the time frame by chaging the date range in the sidebar*")
+        st.markdown("\n\n")
         #st.bar_chart(df.set_index('PRODUCTNAME')['TOTAL_SALES'])  
         #df["TOTAL_SALES"] = df["TOTAL_SALES"].round(2)  # Round to 2 decimal places
 
@@ -213,6 +215,7 @@ def load_page():
         
         df_inventory_aging = get_Inventory_Aging_data()
         st.markdown("### :blue[Inventory Aging]")
+        st.markdown("##### *Below you will find which non-edible Cannabis products have been in inventory for 121+ days*")
         with st.expander("Please expand to see the Inventory Aging data"):
             #st.dataframe(df_inventory_aging.head(10))
 
