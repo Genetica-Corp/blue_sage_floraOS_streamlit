@@ -35,7 +35,7 @@ def load_page():
         if analysis_type == 'Profitability Analysis':
                 st.markdown(f"#### Below you will find insightful sale metrics :blue[*{date_range_text}*]")
                 df_weekly_profitability = get_weekly_profitability(query_date_filter)
-                fig1 = px.bar(df_weekly_profitability, x='DAY_OF_WEEK', y='TOTAL_REVENUE', title='Weekly Sales')
+                fig1 = px.bar(df_weekly_profitability, x='DAY_OF_WEEK', y='TOTAL_REVENUE', title='This chart shows which days of the week are the most profitable')
                 st.plotly_chart(fig1, use_container_width=True)
 
         if analysis_type == 'Customer Analysis':
