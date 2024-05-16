@@ -241,9 +241,15 @@ def load_page():
                 .sort_values(by="121+", ascending=False)  # Sort by '121+' column, descending order
                 .head(10)                                  # Select the top 10
                 )
+            
+
+            carthage_inventory_markdown = display_inventory_aging(df_products_with_large_inventory_Carthage)
+            st.markdown(carthage_inventory_markdown)
+
+            lebanon_inventory_markdown = display_inventory_aging(df_products_with_large_inventory_Lebanon)
+            st.markdown(lebanon_inventory_markdown)
 
 
-            st.dataframe(df_products_with_large_inventory_Lebanon)
-            st.dataframe(df_products_with_large_inventory_Carthage)      
+
 
 load_page()
