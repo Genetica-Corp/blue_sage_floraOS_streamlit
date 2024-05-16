@@ -243,7 +243,18 @@ def load_page():
                 )
 
 
-            st.dataframe(df_products_with_large_inventory_Lebanon)
-            st.dataframe(df_products_with_large_inventory_Carthage)      
+            #st.dataframe(df_products_with_large_inventory_Lebanon)
+            #st.table(df_products_with_large_inventory_Carthage)
+            #st.dataframe(df_products_with_large_inventory_Carthage)
+
+            carthage_inventory_markdown = display_inventory_aging(df_products_with_large_inventory_Carthage)
+            st.markdown(carthage_inventory_markdown)
+
+            lebanon_inventory_markdown = display_inventory_aging(df_products_with_large_inventory_Lebanon)
+            st.markdown(lebanon_inventory_markdown)
+
+
+
+ 
 
 load_page()

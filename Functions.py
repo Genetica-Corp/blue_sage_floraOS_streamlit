@@ -2,6 +2,8 @@ import pandas as pd
 from snowflake.connector import connect
 import streamlit as st
 import plotly.express as px
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 def run_query(query):
     conn = st.connection("snowflake")
@@ -158,3 +160,37 @@ def get_transaction_data():
             """
     df_transaction_data = run_query(query)
     return df_transaction_data
+
+
+
+#def create_heatmap(dataframe):
+    fig, ax = plt.subplots(figsize=(6, 5))
+    sns.heatmap(dataframe[['0-30', '31-60', '61-90', '91-120', '121+']], annot=True, cmap='coolwarm', fmt=".1f", ax=ax)
+    plt.title('Inventory Age Distribution')
+
+    return fig
+
+def create_heatmap(dataframe):
+    plt.figure(figsize=(10, 3))
+    sns.heatmap(dataframe.set_index(['LOCATION', 'PRODUCT'])[['0-30', '31-60', '61-90', '91-120', '121+']], annot=True, cmap='coolwarm', fmt=".1f")
+    plt.title('Inventory Age Distribution')
+    plt.xlabel('Age Categories')
+    plt.ylabel('Product and Location')
+    return plt
+
+
+def display_inventory_aging(df):
+    # Filter the dataframe to only include rows where the inventory aged 121+ is greater than zero
+    df_filtered = df[df['121+'] > 0].reset_index(drop=True)
+    
+    # Initialize markdown strings
+    inventory_markdown = "### 🌿 Products with Inventory Aged 121+ Days 🌿\n"
+
+    # Construct markdown content for each product
+    for i in range(len(df_filtered)):
+        product = df_filtered.iloc[i]
+        inventory_markdown += (
+            f"{i + 1}. **{product['LOCATION']} - :blue[{product['PRODUCT']}**] :orange[{product['121+']}] units aged 121+ days\n"
+        )
+
+    return inventory_markdown
