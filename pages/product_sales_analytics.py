@@ -14,7 +14,7 @@ from functions.functions import (
 
 # Set page configuration with error handling
 try:
-    st.set_page_config(layout='wide', initial_sidebar_state='expanded')
+    st.set_page_config(page_title="Product Sales Analytics", layout='wide', initial_sidebar_state='expanded')
 except Exception as e:
     st.error(f"Error setting page configuration: {e}")
 

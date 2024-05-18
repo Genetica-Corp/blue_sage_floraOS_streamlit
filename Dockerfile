@@ -5,9 +5,10 @@ EXPOSE 8081
 
 COPY requirements.txt requirements.txt
 COPY secrets.toml secrets.toml
+COPY . .
+RUN chmod 644 secrets.toml
 RUN pip install -r requirements.txt
 
-COPY . .
 
 CMD streamlit run main.py \
     --server.headless true \

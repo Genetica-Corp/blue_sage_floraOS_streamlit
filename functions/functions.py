@@ -3,7 +3,7 @@ import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-from snowflake.connector import ProgrammingError, DatabaseError
+from snowflake.connector import connect, ProgrammingError, DatabaseError
 
 
 def run_query(query):
