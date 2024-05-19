@@ -180,8 +180,8 @@ def load_page():
                 st.markdown(popular_sales_markdown)
             with col[1]:
                 st.markdown(popular_transactions_markdown)
-            with col[2]:
-                st.dataframe(df)
+            #with col[2]:
+            #    st.dataframe(df)
             
         
 
@@ -197,8 +197,8 @@ def load_page():
                 st.markdown(display_popular_products_by_sales(df_lebanon))
             with col[1]:
                 st.markdown(display_popular_products_by_transactions(df_lebanon))
-            with col[2]:
-                st.dataframe(df)
+            #with col[2]:
+            #    st.dataframe(df)
 
 
         @st.cache_data
