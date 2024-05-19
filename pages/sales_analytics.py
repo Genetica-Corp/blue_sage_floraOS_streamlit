@@ -1,7 +1,7 @@
 import streamlit as st
 import datetime
 import plotly.express as px
-from function.functions import (get_weekly_profitability, get_customer_sales)
+from functions.functions import (get_weekly_profitability, get_customer_sales)
 
 # Set page configuration with error handling
 try:
