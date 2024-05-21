@@ -41,7 +41,7 @@ def load_page():
             query_date_filter = f"WHERE CREATIONDATE BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
             st.markdown(
                 f"#### Below you will find customer sale metrics :blue[*{date_range_text}*]")
-            df_customer_sales = get_customer_sales(query_date_filter)
+            df_customer_sales = get_customer_sales()
             if df_customer_sales is not None and not df_customer_sales.empty:
                 df_customer_sales = df_customer_sales.dropna(
                     subset=['LATITUDE', 'LONGITUDE'])

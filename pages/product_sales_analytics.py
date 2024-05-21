@@ -10,7 +10,7 @@ from functions.functions import (
     display_popular_products_by_transactions,
     get_Lebanon_data,
     display_inventory_aging
-)
+    )
 
 # Set page configuration with error handling
 try:
