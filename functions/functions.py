@@ -215,3 +215,36 @@ def display_inventory_aging(df):
     except KeyError as e:
         st.error(f"Column not found: {e}")
         return ""
+
+def get_hourly_profitability(query_date_filter):
+    query = f"""
+        WITH HourlyRevenue AS (
+            SELECT
+                DATE(checkindate) AS Day,
+                -- Convert 24-hour format to 12-hour format with AM/PM
+                CASE 
+                WHEN EXTRACT(HOUR FROM checkindate) = 0 THEN '12 AM'
+                WHEN EXTRACT(HOUR FROM checkindate) BETWEEN 1 AND 11 THEN TO_CHAR(EXTRACT(HOUR FROM checkindate)) || ' AM'
+                WHEN EXTRACT(HOUR FROM checkindate) = 12 THEN '12 PM'
+                ELSE TO_CHAR(EXTRACT(HOUR FROM checkindate) - 12) || ' PM'
+                END AS HourFormatted,
+                SUM(total) AS HourlyTotal
+            FROM FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS
+            {query_date_filter}
+            AND
+                EXTRACT(HOUR FROM checkindate) BETWEEN 8 AND 23 -- Only include transactions between 8 AM and 11 PM
+            GROUP BY
+                Day,
+                HourFormatted
+            )
+            SELECT
+            HourFormatted,
+            ROUND(AVG(HourlyTotal),2) AS AverageRevenuePerHour
+            FROM
+            HourlyRevenue
+            GROUP BY
+            HourFormatted
+            ORDER BY
+            MIN(EXTRACT(HOUR FROM TO_TIMESTAMP(HourFormatted, 'HH12 AM'))) ASC;
+    """
+    return get_data(query)
