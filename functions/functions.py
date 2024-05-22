@@ -149,13 +149,15 @@ def get_weekly_profitability(query_date_filter):
     return get_data(query)
 
 
-def get_customer_sales():
-    query = """
+def get_customer_sales(query_date_filter):
+    query = f"""
         SELECT
             LATITUDE, 
             LONGITUDE
-        FROM FLORAOS.BLUE_SAGE.MATCHED_CUSTOMERS_ZIPCODES          
-        WHERE LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL;
+        FROM FLORAOS.BLUE_SAGE.MATCHED_CUSTOMERS_ZIPCODES
+        {query_date_filter}          
+        AND LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL
+        ;
     """
     return get_data(query)
 
