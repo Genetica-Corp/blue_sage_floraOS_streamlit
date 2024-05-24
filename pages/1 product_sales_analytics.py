@@ -209,51 +209,6 @@ def load_page():
                         st.warning(
                             "No data available for Lebanon for the selected date range.")
 
-                @st.cache_data
-                def get_Inventory_Aging_data():
-                    query = """
-                            SELECT
-                            SPLIT_PART (LOCATION, ' - ', 2) AS LOCATION,
-                            PRODUCT, CATEGORY, MASTERCATEGORY, CANNABISINVENTORY, 
-                            "0-30", "31-60", "61-90", "91-120", "121+" 
-                            FROM floraos.blue_sage.report_inventory_aging_may_7_24
-                            """
-                    return run_query(query)
-
-                df_inventory_aging = get_Inventory_Aging_data()
-                if df_inventory_aging is not None and not df_inventory_aging.empty:
-                    st.markdown("### :blue[Inventory Aging]")
-                    st.markdown(
-                        "##### *Below you will find which non-edible Cannabis products have been in inventory for 121+ days*")
-                    with st.expander("Please expand to see the Inventory Aging data"):
-                        df_filtered = df_inventory_aging[df_inventory_aging["CANNABISINVENTORY"]]
-                        df_products_with_large_inventory_Lebanon = (
-                            df_filtered[
-                                (df_filtered['LOCATION'] == 'Lebanon (SMO5)') &
-                                (df_filtered['CATEGORY'] != 'Edibles')
-                            ]
-                            .sort_values(by="121+", ascending=False)
-                            .head(10)
-                        )
-
-                        df_products_with_large_inventory_Carthage = (
-                            df_filtered[
-                                (df_filtered['LOCATION'] == 'Carthage (SMO4)') &
-                                (df_filtered['CATEGORY'] == 'Flower')
-                            ]
-                            .sort_values(by="121+", ascending=False)
-                            .head(10)
-                        )
-
-                        carthage_inventory_markdown = display_inventory_aging(
-                            df_products_with_large_inventory_Carthage)
-                        st.markdown(carthage_inventory_markdown)
-
-                        lebanon_inventory_markdown = display_inventory_aging(
-                            df_products_with_large_inventory_Lebanon)
-                        st.markdown(lebanon_inventory_markdown)
-                else:
-                    st.warning("No inventory aging data available.")
             else:
                 st.warning("No data available for the selected date range.")
     except Exception as e:

@@ -1,4 +1,6 @@
 import streamlit as st
+import plotly.graph_objs as go
+import plotly.subplots as sp
 import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -250,3 +252,68 @@ def get_hourly_profitability(query_date_filter):
             MIN(EXTRACT(HOUR FROM TO_TIMESTAMP(HourFormatted, 'HH12 AM'))) ASC;
     """
     return get_data(query)
+
+def display_top_customers(df):
+    try:
+        # Sort the dataframe by number of transactions
+        df_sorted = df.sort_values(by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
+        
+        # Initialize markdown string
+        popular_customers_markdown = "### 🏆 Top 10 Customers by :blue[Number of Transactions and Total Revenue] 🏆\n"
+        
+        # Construct markdown content for top customers
+        for i in range(min(10, len(df_sorted))):  # Ensure we don't go out of index range
+            customer = df_sorted.iloc[i]
+            popular_customers_markdown += (
+                f"{i + 1}. **:blue[{customer['CUSTOMERNAME']}]** ({customer['CUSTOMERTYPE']}) - "
+                f":orange[{customer['NUMBEROFTRANSACTIONS']}] transactions, :orange[${customer['TOTALREVENUE']:.2f}] in revenue :dollar-sign:\n"
+            )
+
+        return popular_customers_markdown
+    
+    except Exception as e:
+        return str(e)
+    
+def display_top_customers_medical(df):
+    try:
+        # Filter dataframes by customer type
+        df_medical = df[df['CUSTOMERTYPE'] == 'Medical'].sort_values(by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
+        
+        # Initialize markdown strings
+        medical_customers_markdown = "### 🏆 Top :orange[Medical] Customers  🏆\n"
+        
+        # Construct markdown content for top medical customers
+        for i in range(min(10, len(df_medical))):  # Ensure we don't go out of index range
+            customer = df_medical.iloc[i]
+            medical_customers_markdown += (
+                f"{i + 1}. **:blue[{customer['CUSTOMERNAME']}]** - "
+                f"{customer['NUMBEROFTRANSACTIONS']} transactions, :orange[${customer['TOTALREVENUE']:.2f}] in revenue!\n"
+            )
+
+        return medical_customers_markdown
+    
+    except Exception as e:
+        return str(e)
+
+def display_top_customers_recreational(df):
+    try:
+        # Filter dataframes by customer type
+        df_recreational = df[df['CUSTOMERTYPE'] == 'Recreational'].sort_values(by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
+        
+        # Initialize markdown strings
+        recreational_customers_markdown = "### 🏆 Top :orange[Recreational] Customers 🏆\n"
+        
+        # Construct markdown content for top recreational customers
+        for i in range(min(10, len(df_recreational))):  # Ensure we don't go out of index range
+            customer = df_recreational.iloc[i]
+            recreational_customers_markdown += (
+                f"{i + 1}. **:blue[{customer['CUSTOMERNAME']}]** - "
+                f"{customer['NUMBEROFTRANSACTIONS']} transactions, :orange[${customer['TOTALREVENUE']:.2f}] in revenue!\n"
+            )
+
+        return recreational_customers_markdown
+    
+    except Exception as e:
+        return str(e)
+
+
