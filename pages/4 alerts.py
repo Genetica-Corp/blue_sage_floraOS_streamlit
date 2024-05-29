@@ -100,6 +100,8 @@ def load_page():
                         st.markdown(lebanon_inventory_markdown)
             else:
                     st.warning("No inventory aging data available.")
+        if analysis_type == '2nd Option':
+             st.markdown("### :blue[2nd Option]")
 
 
 

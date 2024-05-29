@@ -1,9 +1,12 @@
+import pandas as pd
 import datetime
 import streamlit as st
 import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 import seaborn as sns
+#from openai_integration import OpenAIIntegration
+#import asyncio
 from functions.functions import (
     get_budtender_transaction_data,
     display_popular_products_by_sales,
@@ -12,12 +15,28 @@ from functions.functions import (
     display_inventory_aging
     )
 
+# Initialize OpenAI Integration
+#openai_integration = OpenAIIntegration()
+
+# def detect_sales_anomalies(df):
+#     anomalies = []
+#     threshold = df['total_sales'].mean() + 3 * df['total_sales'].std()
+#     for index, row in df.iterrows():
+#         if row['total_sales'] > threshold:
+#             anomalies.append({
+#                 "product_name": row['product_name'],
+#                 "total_sales": row['total_sales'],
+#                 "location": row['location']
+#             })
+#     return anomalies
+
+
+
 # Set page configuration with error handling
 try:
-    st.set_page_config(page_title="Product Sales Analytics", layout='wide', initial_sidebar_state='expanded')
+        st.set_page_config(page_title="Product Sales Analytics", layout='wide', initial_sidebar_state='expanded')
 except Exception as e:
-    st.error(f"Error setting page configuration: {e}")
-
+        st.error(f"Error setting page configuration: {e}")
 
 def run_query(query):
     try:
@@ -41,13 +60,16 @@ def load_page():
         # Calculate the last month's date range
         last_month_end = today.replace(day=1) - datetime.timedelta(days=1)
         last_month_start = last_month_end.replace(day=1)
+        
 
-        # Default to the last month's date range
-        date_range = st.sidebar.date_input("Select Date Range", value=[
-                                           last_month_start, last_month_end], key="date_range", max_value=last_month_end)
+        # Default to date range for the last month
+        date_range = st.sidebar.date_input("Select Date Range", value=[last_month_start, today], key="date_range", max_value=today)
 
         query_date_filter = f"WHERE transactiondate BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
         date_range_text = f"for the time frame between {date_range[0]} and {date_range[1]}"
+
+        #print(date_range)
+        #print(query_date_filter)
 
         # Sidebar for selecting analytics
         st.sidebar.header('Analytics Options')
@@ -133,7 +155,7 @@ def load_page():
                     SUM(i.totalprice) AS total_sales,
                     COUNT(DISTINCT i.transactionid) AS total_transactions
                     FROM
-                    FLORAOS.BLUE_SAGE.flattened_itemsv_blue_sage_04_28_2024 AS i
+                    FLORAOS.BLUE_SAGE.FLATTENED_ITEMSV_BLUE_SAGE_04_28_2024 AS i
                     JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
                     JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
                     {query_date_filter}
@@ -208,11 +230,10 @@ def load_page():
                     else:
                         st.warning(
                             "No data available for Lebanon for the selected date range.")
-
-            else:
-                st.warning("No data available for the selected date range.")
+        else:
+            st.warning("No data available for the selected date range.")
     except Exception as e:
         st.error(f"An error occurred: {e}")
 
-
+                        
 load_page()
