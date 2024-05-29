@@ -24,7 +24,7 @@ except Exception as e:
     st.error(f"Error setting page configuration: {e}")
 
 # Initialize OpenAI API key
-openai.api_key = 'sk-proj-U7Mp3L3xVeuXsrTCUNMcT3BlbkFJzaWpjnRQeCWREhVSlNcK'
+
 
 # File to store date selections
 DATE_SELECTIONS_FILE = "date_selections.json"
