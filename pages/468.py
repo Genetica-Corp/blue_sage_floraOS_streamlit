@@ -22,9 +22,7 @@ try:
     st.set_page_config(page_title="Product Sales Analytics", layout='wide', initial_sidebar_state='expanded')
 except Exception as e:
     st.error(f"Error setting page configuration: {e}")
-
-# Initialize OpenAI API key
-
+    
 
 # File to store date selections
 DATE_SELECTIONS_FILE = "date_selections.json"

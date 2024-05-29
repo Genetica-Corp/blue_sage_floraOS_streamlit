@@ -21,8 +21,6 @@ try:
 except Exception as e:
     st.error(f"Error setting page configuration: {e}")
 
-# Initialize OpenAI API key
-
 def run_query(query):
     try:
         conn = st.connection("snowflake")
