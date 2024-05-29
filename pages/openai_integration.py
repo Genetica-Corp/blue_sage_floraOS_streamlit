@@ -3,9 +3,6 @@ import streamlit as st
 import pandas as pd
 
 class OpenAIIntegration:
-    def __init__(self):
-        openai.api_key = st.secrets["OPENAI_API_KEY"]
-
     async def generate_insights(self, data_frame, engine="gpt-3.5-turbo", max_tokens=2500):
         prompt = f"Please summarize this data: {data_frame.to_json(orient='records')}"
         try:

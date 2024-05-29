@@ -6,7 +6,6 @@ from langchain.prompts import PromptTemplate
 
 class OpenAIIntegration:
     def __init__(self):
-        openai.api_key = st.secrets["OPENAI_API_KEY"]
         self.llm = OpenAI(temperature=0.7, openai_api_key=openai.api_key)
 
     async def generate_insights(self, data_frame, max_tokens=150):
