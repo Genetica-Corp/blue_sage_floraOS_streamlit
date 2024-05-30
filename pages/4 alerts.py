@@ -61,10 +61,10 @@ def load_page():
         st.sidebar.header('Analytics Options')
         analysis_type = st.sidebar.radio(
             "Select Analysis Type",
-            ('Product Recommendations', '2nd Option'))        
+            ('Inventory Aging', 'Summary'))        
         
 
-        if analysis_type == 'Product Recommendations':
+        if analysis_type == 'Inventory Aging':
             df_inventory_aging = get_Inventory_Aging_data()
             if df_inventory_aging is not None and not df_inventory_aging.empty:
                     st.markdown("### :blue[Inventory Aging]")

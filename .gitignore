@@ -8,3 +8,4 @@ secrets.toml
 *.env
 *.yaml
 *.yml
+*.env

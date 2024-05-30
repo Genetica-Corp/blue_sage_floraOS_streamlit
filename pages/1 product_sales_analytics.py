@@ -1,4 +1,11 @@
 import datetime
+import toml
+import json
+import os
+from dotenv import load_dotenv
+import openai
+import random
+import time
 import streamlit as st
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -11,6 +18,72 @@ from functions.functions import (
     get_Lebanon_data,
     display_inventory_aging
     )
+
+# Load the .env file
+load_dotenv()
+
+# Access the OpenAI API key
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+
+DATE_SELECTIONS_FILE = "date_selections.json"
+
+def generate_summary(text):
+    try:
+        response = openai.chat.completions.create(model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": f"""This is the top 10 products sold by this store. 
+                Please summarize the following analysis results and create an action plan based on the summary.
+                Additionally, make comparisons between the two date ranges and suggest actions based on the data.
+                
+                Analysis Results:
+                {text}
+                
+                Format the response as follows:
+                
+                **Summary:**
+                - Key point 1
+                - Key point 2
+                - Key point 3
+
+                **Comparison:**
+                - Comparison point 1
+                - Comparison point 2
+                - Comparison point 3
+
+                **Action Plan:**
+                1. Action item 1
+                2. Action item 2
+                3. Action item 3
+                
+                End the summary with '### End of Summary'.
+                """}
+        ],
+        max_tokens=3000,
+        temperature=0.3,
+        stop=["### End of Summary"])
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        st.error(f"Error generating summary: {e}")
+        return "Summary generation failed."
+
+
+
+
+def load_date_selections():
+    if os.path.exists(DATE_SELECTIONS_FILE):
+        with open(DATE_SELECTIONS_FILE, 'r') as file:
+            return json.load(file)
+    return []
+
+def save_date_selections(date_selections):
+    with open(DATE_SELECTIONS_FILE, 'w') as file:
+        json.dump(date_selections, file)
+
+# Load previous date selections
+if 'date_selections' not in st.session_state:
+    st.session_state['date_selections'] = load_date_selections()
 
 # Set page configuration with error handling
 try:
@@ -51,11 +124,18 @@ def load_page():
         #print(query_date_filter)
         date_range_text = f"for the time frame between {date_range[0]} and {date_range[1]}"
 
+        if st.sidebar.button("Save Date Range"):
+            st.session_state['date_selections'].append({
+                'start_date': str(date_range[0]),
+                'end_date': str(date_range[1])
+            })
+            save_date_selections(st.session_state['date_selections'])
+
         # Sidebar for selecting analytics
         st.sidebar.header('Analytics Options')
         analysis_type = st.sidebar.radio(
             "Select Analysis Type",
-            ('Sales by Product', 'Average Sale Amount')
+            ('Sales by Product', 'Average Sale Amount', 'Compare Dates')
         )
 
         if analysis_type == 'Average Sale Amount':
@@ -213,6 +293,80 @@ def load_page():
 
             else:
                 st.warning("No data available for the selected date range.")
+
+        if analysis_type == 'Compare Dates':
+                st.markdown("#### Compare Date Ranges")
+                saved_dates = st.session_state['date_selections']
+
+                if not saved_dates:
+                    st.warning("No date ranges have been saved yet.")
+                else:
+                    selected_dates = st.multiselect(
+                        "Select Date Ranges to Compare",
+                        options=[f"{d['start_date']} to {d['end_date']}" for d in saved_dates],
+                        default=[f"{d['start_date']} to {d['end_date']}" for d in saved_dates[:2]]  # Default to the first two date ranges
+                    )
+
+                    if len(selected_dates) != 2:
+                        st.warning("Please select exactly two date ranges to compare.")
+                    else:
+                        date1, date2 = selected_dates
+                        date1_start, date1_end = date1.split(" to ")
+                        date2_start, date2_end = date2.split(" to ")
+
+                        query1 = f"""
+                            SELECT
+                            p.productname,
+                            SUM(i.totalprice) AS total_sales,
+                            COUNT(DISTINCT i.transactionid) AS total_transactions
+                            FROM
+                            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
+                            JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
+                            JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+                            WHERE T.transactiondate BETWEEN '{date1_start}' AND '{date1_end}'
+                            GROUP BY p.productname
+                            ORDER BY total_sales DESC
+                            LIMIT 10;
+                        """
+
+                        query2 = f"""
+                            SELECT
+                            p.productname,
+                            SUM(i.totalprice) AS total_sales,
+                            COUNT(DISTINCT i.transactionid) AS total_transactions
+                            FROM
+                            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
+                            JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
+                            JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+                            WHERE T.transactiondate BETWEEN '{date2_start}' AND '{date2_end}'
+                            GROUP BY p.productname
+                            ORDER BY total_sales DESC
+                            LIMIT 10;
+                        """
+
+                        df1 = run_query(query1)
+                        df2 = run_query(query2)
+
+                        if df1 is not None and df2 is not None:
+                            col1, col2 = st.columns(2)
+
+                            with col1:
+                                st.markdown(f"### Top 10 Products from {date1}")
+                                st.dataframe(df1)
+                                summary1 = generate_summary(df1.to_string())
+                                st.markdown("### :orange[Summary]")
+                                st.write(summary1)
+
+                            with col2:
+                                st.markdown(f"### Top 10 Products from {date2}")
+                                st.dataframe(df2)
+                                summary2 = generate_summary(df2.to_string())
+                                st.markdown("### :orange[Summary]")
+                                st.write(summary2)
+
+                            comparison_summary = generate_summary(f"Comparison between {date1} and {date2}:\n\n{df1.to_string()}\n\n{df2.to_string()}")
+                            st.markdown("### :orange[Comparison Summary]")
+                            st.write(comparison_summary)
     except Exception as e:
         st.error(f"An error occurred: {e}")
 

@@ -1,7 +1,10 @@
 matplotlib==3.8.4
+openai==1.30.5
 pandas==2.0.3
 plotly==5.20.0
+python-dotenv==1.0.1
 seaborn==0.13.2
 snowflake_connector_python==3.8.1
 snowflake_snowpark_python==1.14.0
-streamlit
+streamlit==1.34.0
+toml==0.10.2
