@@ -7,7 +7,7 @@ COPY requirements.txt requirements.txt
 COPY . .
 RUN pip install -r requirements.txt
 
-CMD streamlit run Main.py \
+CMD streamlit run main.py \
     --server.headless true \
     --server.port=8081 \
     --server.enableCORS false \

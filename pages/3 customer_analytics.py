@@ -1,16 +1,15 @@
 import datetime
 import streamlit as st
-import matplotlib.pyplot as plt
-import plotly.express as px
-import plotly.graph_objects as go
-import seaborn as sns
-from functions.functions import (run_query, display_top_customers, display_top_customers_medical, display_top_customers_recreational)
+from functions.functions import (run_query, display_top_customers,
+                                 display_top_customers_medical, display_top_customers_recreational)
 
 # Set page configuration with error handling
 try:
-    st.set_page_config(page_title="Customer Analytics", layout='wide', initial_sidebar_state='expanded')
+    st.set_page_config(page_title="Customer Analytics",
+                       layout='wide', initial_sidebar_state='expanded')
 except Exception as e:
     st.error(f"Error setting page configuration: {e}")
+
 
 def run_query(query):
     try:
@@ -22,6 +21,7 @@ def run_query(query):
     except Exception as e:
         st.error(f"Error running query: {e}")
         return None
+
 
 def get_customer_data(date_range):
     query_date_filter_customer = f"WHERE dt.checkindate BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
@@ -43,7 +43,6 @@ def get_customer_data(date_range):
                 TOTALREVENUE DESC;
             """
     return run_query(query)
-    
 
 
 def load_page():
@@ -69,21 +68,22 @@ def load_page():
         analysis_type = st.sidebar.radio(
             "Select Analysis Type",
             ('Customer Popularity', 'Customer Segmentation'))
-        
-        
 
         if analysis_type == 'Customer Popularity':
             df_customer_transactions_revenue = get_customer_data(date_range)
-            #st.dataframe(df_customer_transactions_revenue)
+            # st.dataframe(df_customer_transactions_revenue)
 
-            markdown_content = display_top_customers(df_customer_transactions_revenue)
+            markdown_content = display_top_customers(
+                df_customer_transactions_revenue)
             st.markdown(markdown_content)
 
             with st.expander("Please expand to see segmentation by customer type (Medical/Recreational)"):
                 col = st.columns((1, 1, 1), gap='small')
 
-                medical_customers_markdown = display_top_customers_medical(df_customer_transactions_revenue)
-                recreational_customers_markdown = display_top_customers_recreational(df_customer_transactions_revenue)
+                medical_customers_markdown = display_top_customers_medical(
+                    df_customer_transactions_revenue)
+                recreational_customers_markdown = display_top_customers_recreational(
+                    df_customer_transactions_revenue)
 
                 with col[0]:
                     st.markdown(medical_customers_markdown)
@@ -91,13 +91,8 @@ def load_page():
                 with col[1]:
                     st.markdown(recreational_customers_markdown)
 
-
-
-
     except Exception as e:
         st.error(f"An error occurred: {e}")
-
-
 
 
 load_page()

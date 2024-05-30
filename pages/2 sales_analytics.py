@@ -1,7 +1,7 @@
 import streamlit as st
 import datetime
 import plotly.express as px
-from functions.functions import (get_weekly_profitability, 
+from functions.functions import (get_weekly_profitability,
                                  get_customer_sales,
                                  get_hourly_profitability)
 
@@ -30,7 +30,6 @@ def load_page():
             "Select Analysis Type",
             ('Profitability Analysis', 'Customer Analysis',))
 
-
         if analysis_type == 'Profitability Analysis':
             st.markdown(
                 f"#### Below you will find insightful sale metrics :blue[*{date_range_text}*]")
@@ -40,15 +39,13 @@ def load_page():
                           title='This chart shows which days of the week are the most profitable')
             st.plotly_chart(fig1, use_container_width=True)
 
+            df_hourly_profitability = get_hourly_profitability(
+                query_date_filter)
 
-            df_hourly_profitability = get_hourly_profitability(query_date_filter)
-
-            fig = px.line(df_hourly_profitability, x="HOURFORMATTED", y="AVERAGEREVENUEPERHOUR", title="Average Revenue per Hour")
+            fig = px.line(df_hourly_profitability, x="HOURFORMATTED",
+                          y="AVERAGEREVENUEPERHOUR", title="Average Revenue per Hour")
             fig.update_layout(xaxis_tickangle=-45)
             st.plotly_chart(fig, use_container_width=True)
-
-
-
 
         if analysis_type == 'Customer Analysis':
             query_date_filter = f"WHERE CREATIONDATE BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""

@@ -8,8 +8,7 @@ from functions.functions import (
     get_budtender_transaction_data,
     display_popular_products_by_sales,
     display_popular_products_by_transactions,
-    get_Lebanon_data,
-    display_inventory_aging
+    get_Lebanon_data
     )
 
 # Set page configuration with error handling

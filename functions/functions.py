@@ -1,6 +1,4 @@
 import streamlit as st
-import plotly.graph_objs as go
-import plotly.subplots as sp
 import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -22,16 +20,19 @@ def run_query(query):
         st.error(f"An error occurred: {e}")
         return pd.DataFrame()
 
+
 def display_popular_products_by_sales(df):
     try:
         # Sort the dataframe by total sales
-        df_sorted_sales = df.sort_values(by="TOTAL_SALES", ascending=False).reset_index(drop=True)
-        
+        df_sorted_sales = df.sort_values(
+            by="TOTAL_SALES", ascending=False).reset_index(drop=True)
+
         # Initialize markdown strings
         popular_sales_markdown = "### 🏆 Top 10 Products by :blue[Total Sales] 🏆\n"
-        
+
         # Construct markdown content for each metric
-        for i in range(min(10, len(df_sorted_sales))):  # Ensure we don't go out of index range
+        # Ensure we don't go out of index range
+        for i in range(min(10, len(df_sorted_sales))):
             sales_product = df_sorted_sales.iloc[i]
 
             # Sales-based report
@@ -44,15 +45,18 @@ def display_popular_products_by_sales(df):
         st.error(f"Column not found: {e}")
         return ""
 
+
 def display_popular_products_by_transactions(df):
     try:
         # Sort the dataframe by total transactions
-        df_sorted_transactions = df.sort_values(by="TOTAL_TRANSACTIONS", ascending=False).reset_index(drop=True)
-        
+        df_sorted_transactions = df.sort_values(
+            by="TOTAL_TRANSACTIONS", ascending=False).reset_index(drop=True)
+
         popular_transactions_markdown = "### 🏆 Top 10 Products by :blue[Total Transactions] 🏆\n"
 
         # Construct markdown content for each metric
-        for i in range(min(10, len(df_sorted_transactions))):  # Ensure we don't go out of index range
+        # Ensure we don't go out of index range
+        for i in range(min(10, len(df_sorted_transactions))):
             trans_product = df_sorted_transactions.iloc[i]
 
             # Transactions-based report
@@ -64,6 +68,7 @@ def display_popular_products_by_transactions(df):
     except KeyError as e:
         st.error(f"Column not found: {e}")
         return ""
+
 
 def display_popular_products(df, by, top_n=10):
     try:
@@ -220,6 +225,7 @@ def display_inventory_aging(df):
         st.error(f"Column not found: {e}")
         return ""
 
+
 def get_hourly_profitability(query_date_filter):
     query = f"""
         WITH HourlyRevenue AS (
@@ -253,14 +259,16 @@ def get_hourly_profitability(query_date_filter):
     """
     return get_data(query)
 
+
 def display_top_customers(df):
     try:
         # Sort the dataframe by number of transactions
-        df_sorted = df.sort_values(by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
-        
+        df_sorted = df.sort_values(
+            by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
+
         # Initialize markdown string
         popular_customers_markdown = "### 🏆 Top 10 Customers by :blue[Number of Transactions and Total Revenue] 🏆\n"
-        
+
         # Construct markdown content for top customers
         for i in range(min(10, len(df_sorted))):  # Ensure we don't go out of index range
             customer = df_sorted.iloc[i]
@@ -270,18 +278,20 @@ def display_top_customers(df):
             )
 
         return popular_customers_markdown
-    
+
     except Exception as e:
         return str(e)
-    
+
+
 def display_top_customers_medical(df):
     try:
         # Filter dataframes by customer type
-        df_medical = df[df['CUSTOMERTYPE'] == 'Medical'].sort_values(by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
-        
+        df_medical = df[df['CUSTOMERTYPE'] == 'Medical'].sort_values(
+            by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
+
         # Initialize markdown strings
         medical_customers_markdown = "### 🏆 Top :orange[Medical] Customers  🏆\n"
-        
+
         # Construct markdown content for top medical customers
         for i in range(min(10, len(df_medical))):  # Ensure we don't go out of index range
             customer = df_medical.iloc[i]
@@ -291,20 +301,23 @@ def display_top_customers_medical(df):
             )
 
         return medical_customers_markdown
-    
+
     except Exception as e:
         return str(e)
+
 
 def display_top_customers_recreational(df):
     try:
         # Filter dataframes by customer type
-        df_recreational = df[df['CUSTOMERTYPE'] == 'Recreational'].sort_values(by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
-        
+        df_recreational = df[df['CUSTOMERTYPE'] == 'Recreational'].sort_values(
+            by="NUMBEROFTRANSACTIONS", ascending=False).reset_index(drop=True)
+
         # Initialize markdown strings
         recreational_customers_markdown = "### 🏆 Top :orange[Recreational] Customers 🏆\n"
-        
+
         # Construct markdown content for top recreational customers
-        for i in range(min(10, len(df_recreational))):  # Ensure we don't go out of index range
+        # Ensure we don't go out of index range
+        for i in range(min(10, len(df_recreational))):
             customer = df_recreational.iloc[i]
             recreational_customers_markdown += (
                 f"{i + 1}. **:blue[{customer['CUSTOMERNAME']}]** - "
@@ -312,8 +325,6 @@ def display_top_customers_recreational(df):
             )
 
         return recreational_customers_markdown
-    
+
     except Exception as e:
         return str(e)
-
-
