@@ -59,7 +59,7 @@ def load_page():
                 df_customer_sales = df_customer_sales.dropna(
                     subset=['LATITUDE', 'LONGITUDE'])
                 st.markdown(
-                    '#### The map below shows the :blue[location of customers] based on their home address.')
+                    '#### The map below shows the :blue[location of new customers] based on their home address.')
                 st.map(
                     df_customer_sales[['LATITUDE', 'LONGITUDE']].astype(float))
             else:

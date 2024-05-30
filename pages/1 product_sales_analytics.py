@@ -15,7 +15,7 @@ from functions.functions import (
     get_budtender_transaction_data,
     display_popular_products_by_sales,
     display_popular_products_by_transactions,
-    get_Lebanon_data,
+    get_tulsa_data,
     display_inventory_aging
     )
 
@@ -219,7 +219,7 @@ def load_page():
                     JOIN FLORAOS.DRAGON_LILY.dutchie_inventory AS p ON i.productid = p.productid
                     JOIN FLORAOS.DRAGON_LILY.dutchie_transactions AS t ON i.transactionid = t.transactionid
                     {query_date_filter}
-                    AND p.location = 'carthage'
+                    AND p.location = 'tulsa'
                     GROUP BY
                     p.productname,
                     p.location
@@ -249,7 +249,7 @@ def load_page():
                 )
 
                 bar_chart.update_layout(
-                    title="Top Selling Products for Carthage",
+                    title="Top Selling Products for tulsa",
                     xaxis_title="Product Name",
                     yaxis_title="Total Sales ($)",
                     xaxis_tickangle=45,
@@ -262,8 +262,8 @@ def load_page():
                     df)
 
                 st.markdown(
-                    "### :orange[Carthage] -  *Sales* and *Transactions* by Product")
-                with st.expander("Please expand to see the Carthage Sales and Product data"):
+                    "### :orange[tulsa] -  *Sales* and *Transactions* by Product")
+                with st.expander("Please expand to see the tulsa Sales and Product data"):
                     col = st.columns((1, 1, 1), gap='small')
                     with col[0]:
                         st.markdown(popular_sales_markdown)
@@ -272,24 +272,24 @@ def load_page():
                     with col[2]:
                         st.dataframe(df)
 
-                st.markdown(
-                    "### :orange[Lebanon] -  *Sales* and *Transactions* by Product")
-                with st.expander("Please expand to see the Lebanon Sales and Product data"):
-                    col = st.columns((1, 1, 1), gap='small')
+                # st.markdown(
+                #     "### :orange[tulsa] -  *Sales* and *Transactions* by Product")
+                # with st.expander("Please expand to see the tulsa Sales and Product data"):
+                #     col = st.columns((1, 1, 1), gap='small')
 
-                    df_lebanon = get_Lebanon_data(query_date_filter)
-                    if df_lebanon is not None and not df_lebanon.empty:
-                        with col[0]:
-                            st.markdown(
-                                display_popular_products_by_sales(df_lebanon))
-                        with col[1]:
-                            st.markdown(
-                                display_popular_products_by_transactions(df_lebanon))
-                        with col[2]:
-                            st.dataframe(df_lebanon)
-                    else:
-                        st.warning(
-                            "No data available for Lebanon for the selected date range.")
+                #     df_tulsa = get_tulsa_data(query_date_filter)
+                #     if df_tulsa is not None and not df_tulsa.empty:
+                #         with col[0]:
+                #             st.markdown(
+                #                 display_popular_products_by_sales(df_tulsa))
+                #         with col[1]:
+                #             st.markdown(
+                #                 display_popular_products_by_transactions(df_tulsa))
+                #         with col[2]:
+                #             st.dataframe(df_tulsa)
+                #     else:
+                #         st.warning(
+                #             "No data available for tulsa for the selected date range.")
 
             else:
                 st.warning("No data available for the selected date range.")

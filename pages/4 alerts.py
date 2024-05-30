@@ -73,31 +73,33 @@ def load_page():
                     st.markdown("##### It is recommended to :orange[markdown these products] to move them faster")
                     with st.expander("Please expand to see the Inventory Aging data"):
                         df_filtered = df_inventory_aging[df_inventory_aging["CANNABISINVENTORY"]]
-                        df_products_with_large_inventory_Lebanon = (
+                        df_products_with_large_inventory_tulsa_edibles = (
                             df_filtered[
-                                (df_filtered['LOCATION'] == 'Lebanon (SMO5)') &
                                 (df_filtered['CATEGORY'] != 'Edibles')
                             ]
                             .sort_values(by="121+", ascending=False)
                             .head(10)
                         )
 
-                        df_products_with_large_inventory_Carthage = (
+                        df_products_with_large_inventory_tulsa_flower = (
                             df_filtered[
-                                (df_filtered['LOCATION'] == 'Carthage (SMO4)') &
                                 (df_filtered['CATEGORY'] == 'Flower')
                             ]
                             .sort_values(by="121+", ascending=False)
                             .head(10)
                         )
 
-                        carthage_inventory_markdown = display_inventory_aging(
-                            df_products_with_large_inventory_Carthage)
-                        st.markdown(carthage_inventory_markdown)
+                        tulsa_inventory_markdown_flower = display_inventory_aging(
+                            df_products_with_large_inventory_tulsa_flower)
+                        st.markdown(tulsa_inventory_markdown_flower)
 
-                        lebanon_inventory_markdown = display_inventory_aging(
-                            df_products_with_large_inventory_Lebanon)
-                        st.markdown(lebanon_inventory_markdown)
+                        tulsa_inventory_markdown_edibles = display_inventory_aging(
+                            df_products_with_large_inventory_tulsa_edibles)
+                        st.markdown(tulsa_inventory_markdown_edibles)
+
+                        # tulsa_inventory_markdown = display_inventory_aging(
+                        #     df_products_with_large_inventory_tulsa)
+                        # st.markdown(tulsa_inventory_markdown)
             else:
                     st.warning("No inventory aging data available.")
 

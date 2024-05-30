@@ -85,7 +85,7 @@ def get_data(query):
     return run_query(query)
 
 
-def get_Lebanon_data(query_date_filter):
+def get_tulsa_data(query_date_filter):
     query = f"""
         SELECT
             p.productname,
@@ -97,7 +97,7 @@ def get_Lebanon_data(query_date_filter):
             JOIN FLORAOS.DRAGON_LILY.dutchie_inventory AS p ON i.productid = p.productid
             JOIN FLORAOS.DRAGON_LILY.dutchie_transactions AS t ON i.transactionid = t.transactionid
         {query_date_filter}
-        AND p.location = 'lebanon'
+        AND p.location = 'tulsa'
         GROUP BY
             p.productname,
             p.location
