@@ -47,6 +47,7 @@ def load_page():
                                            last_month_start, today], key="date_range", max_value=today)
 
         query_date_filter = f"WHERE T.TRANSACTIONDATE BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
+        query_date_filter_budtender = f"WHERE TRANSACTIONDATE BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
         #print(query_date_filter)
         date_range_text = f"for the time frame between {date_range[0]} and {date_range[1]}"
 
@@ -60,7 +61,7 @@ def load_page():
         if analysis_type == 'Average Sale Amount':
             st.markdown(
                 f"#### Below you will find product sale metrics :blue[*{date_range_text}*]")
-            df_budtender = get_budtender_transaction_data(query_date_filter)
+            df_budtender = get_budtender_transaction_data(query_date_filter_budtender)
 
             if df_budtender is not None and not df_budtender.empty:
                 col1, col2 = st.columns(2)
