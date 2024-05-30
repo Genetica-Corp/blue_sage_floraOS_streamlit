@@ -267,7 +267,7 @@ def display_top_customers(df):
             customer = df_sorted.iloc[i]
             popular_customers_markdown += (
                 f"{i + 1}. **:blue[{customer['CUSTOMERNAME']}]** ({customer['CUSTOMERTYPE']}) - "
-                f":orange[{customer['NUMBEROFTRANSACTIONS']}] transactions, :orange[${customer['TOTALREVENUE']:.2f}] in revenue :dollar-sign:\n"
+                f":orange[{customer['NUMBEROFTRANSACTIONS']}] transactions, :orange[${customer['TOTALREVENUE']:.2f}] in revenue.\n"
             )
 
         return popular_customers_markdown

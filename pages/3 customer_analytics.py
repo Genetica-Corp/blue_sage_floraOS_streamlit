@@ -91,6 +91,12 @@ def load_page():
                 with col[1]:
                     st.markdown(recreational_customers_markdown)
 
+        if analysis_type == 'Customer Segmentation':
+            st.markdown(
+                f"#### Below you will find customer sale metrics :blue[*{date_range_text}*]")
+            st.markdown("""
+            ##### Customer Segmentation coming soon.""")
+
 
 
 
