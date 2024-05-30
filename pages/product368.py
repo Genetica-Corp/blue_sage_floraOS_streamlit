@@ -70,9 +70,9 @@ def load_page():
 
         # Default to the last month's date range
         date_range = st.sidebar.date_input("Select Date Range", value=[
-                                           last_month_start, last_month_end], key="date_range", max_value=last_month_end)
+                                           last_month_start, today], key="date_range", max_value=today)
 
-        query_date_filter = f"WHERE transactiondate BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
+        query_date_filter = f"WHERE T.transactiondate BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
         date_range_text = f"for the time frame between {date_range[0]} and {date_range[1]}"
 
         # Sidebar for selecting analytics
@@ -170,7 +170,7 @@ def load_page():
                     SUM(i.totalprice) AS total_sales,
                     COUNT(DISTINCT i.transactionid) AS total_transactions
                     FROM
-                    FLORAOS.BLUE_SAGE.flattened_itemsv_blue_sage_04_28_2024 AS i
+                    FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
                     JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
                     JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
                     {query_date_filter}
@@ -274,7 +274,7 @@ def load_page():
                     SELECT
                     DATE_TRUNC('month', transactiondate) AS month,
                     SUM(totalprice) AS total_sales
-                    FROM FLORAOS.BLUE_SAGE.flattened_itemsv_blue_sage_04_28_2024
+                    FROM FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT
                     {query_date_filter}
                     GROUP BY month
                     ORDER BY month;
