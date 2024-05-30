@@ -30,7 +30,7 @@ def get_Inventory_Aging_data():
         SPLIT_PART (LOCATION, ' - ', 2) AS LOCATION,
         PRODUCT, CATEGORY, MASTERCATEGORY, CANNABISINVENTORY, 
         "0-30", "31-60", "61-90", "91-120", "121+" 
-        FROM floraos.blue_sage.report_inventory_aging
+        FROM FLORAOS.DRAGON_LILY.report_inventory_aging
         """
     return run_query(query)
    

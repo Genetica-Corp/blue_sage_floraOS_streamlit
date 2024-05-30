@@ -93,9 +93,9 @@ def get_Lebanon_data(query_date_filter):
             SUM(i.totalprice) AS total_sales,
             COUNT(DISTINCT i.transactionid) AS total_transactions
         FROM
-            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
-            JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
-            JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+            FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS_FLT AS i
+            JOIN FLORAOS.DRAGON_LILY.dutchie_inventory AS p ON i.productid = p.productid
+            JOIN FLORAOS.DRAGON_LILY.dutchie_transactions AS t ON i.transactionid = t.transactionid
         {query_date_filter}
         AND p.location = 'lebanon'
         GROUP BY
@@ -115,7 +115,7 @@ def get_budtender_transaction_data(query_date_filter):
             AVG(total) AS average_sale_amount,
             COUNT(transactionid) AS total_transactions
         FROM
-            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS
+            FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS
         {query_date_filter}
         AND NOT ISVOID
         GROUP BY
@@ -133,7 +133,7 @@ def get_weekly_profitability(query_date_filter):
             DAYNAME(TRANSACTIONDATE) AS DAY_OF_WEEK,
             SUM(TOTAL) AS TOTAL_REVENUE,
             AVG(TOTAL) AS AVERAGE_REVENUE
-        FROM FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS
+        FROM FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS
         {query_date_filter}
         GROUP BY DAY_OF_WEEK
         ORDER BY 
@@ -156,7 +156,7 @@ def get_customer_sales(query_date_filter):
         SELECT
             LATITUDE, 
             LONGITUDE
-        FROM FLORAOS.BLUE_SAGE.MATCHED_CUSTOMERS_ZIPCODES
+        FROM FLORAOS.DRAGON_LILY.MATCHED_CUSTOMERS_ZIPCODES
         {query_date_filter}          
         AND LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL
         ;
@@ -188,7 +188,7 @@ def get_transaction_data():
         SELECT
             CAST(TRANSACTIONDATE AS DATE) AS Transaction_Date,
             TRANSACTIONID, TOTAL
-        FROM FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS
+        FROM FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS
         WHERE TRANSACTIONDATE >= CURRENT_DATE - INTERVAL '1 year';
     """
     return get_data(query)
@@ -234,7 +234,7 @@ def get_hourly_profitability(query_date_filter):
                 ELSE TO_CHAR(EXTRACT(HOUR FROM checkindate) - 12) || ' PM'
                 END AS HourFormatted,
                 SUM(total) AS HourlyTotal
-            FROM FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS
+            FROM FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS
             {query_date_filter}
             AND
                 EXTRACT(HOUR FROM checkindate) BETWEEN 8 AND 23 -- Only include transactions between 8 AM and 11 PM

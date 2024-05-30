@@ -215,9 +215,9 @@ def load_page():
                     SUM(i.totalprice) AS total_sales,
                     COUNT(DISTINCT i.transactionid) AS total_transactions
                     FROM
-                    FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
-                    JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
-                    JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+                    FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS_FLT AS i
+                    JOIN FLORAOS.DRAGON_LILY.dutchie_inventory AS p ON i.productid = p.productid
+                    JOIN FLORAOS.DRAGON_LILY.dutchie_transactions AS t ON i.transactionid = t.transactionid
                     {query_date_filter}
                     AND p.location = 'carthage'
                     GROUP BY
@@ -320,9 +320,9 @@ def load_page():
                             SUM(i.totalprice) AS total_sales,
                             COUNT(DISTINCT i.transactionid) AS total_transactions
                             FROM
-                            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
-                            JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
-                            JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+                            FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS_FLT AS i
+                            JOIN FLORAOS.DRAGON_LILY.dutchie_inventory AS p ON i.productid = p.productid
+                            JOIN FLORAOS.DRAGON_LILY.dutchie_transactions AS t ON i.transactionid = t.transactionid
                             WHERE T.transactiondate BETWEEN '{date1_start}' AND '{date1_end}'
                             GROUP BY p.productname
                             ORDER BY total_sales DESC
@@ -335,9 +335,9 @@ def load_page():
                             SUM(i.totalprice) AS total_sales,
                             COUNT(DISTINCT i.transactionid) AS total_transactions
                             FROM
-                            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
-                            JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
-                            JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+                            FLORAOS.DRAGON_LILY.DUTCHIE_TRANSACTIONS_FLT AS i
+                            JOIN FLORAOS.DRAGON_LILY.dutchie_inventory AS p ON i.productid = p.productid
+                            JOIN FLORAOS.DRAGON_LILY.dutchie_transactions AS t ON i.transactionid = t.transactionid
                             WHERE T.transactiondate BETWEEN '{date2_start}' AND '{date2_end}'
                             GROUP BY p.productname
                             ORDER BY total_sales DESC

@@ -16,8 +16,10 @@ except Exception as e:
 try:
     st.markdown("""
     ### Please Select a Dashboard from the Sidebar
-    - Sales Analytics
     - Product Sales Analytics
+    - Sales Analytics
+    - Customer Analytics
+    - Alerts and Recommendations
     """)
 except Exception as e:
     st.error(f"Error setting main content: {e}")
