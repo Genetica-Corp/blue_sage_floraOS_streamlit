@@ -30,7 +30,7 @@ def get_Inventory_Aging_data():
         SPLIT_PART (LOCATION, ' - ', 2) AS LOCATION,
         PRODUCT, CATEGORY, MASTERCATEGORY, CANNABISINVENTORY, 
         "0-30", "31-60", "61-90", "91-120", "121+" 
-        FROM floraos.blue_sage.report_inventory_aging_may_7_24
+        FROM floraos.blue_sage.report_inventory_aging
         """
     return run_query(query)
    
@@ -52,7 +52,7 @@ def load_page():
 
         # Default to the last month's date range
         date_range = st.sidebar.date_input("Select Date Range", value=[
-                                           last_month_start, last_month_end], key="date_range", max_value=last_month_end)
+                                           last_month_start, today], key="date_range", max_value=today)
 
         query_date_filter = f"WHERE transactiondate BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
         date_range_text = f"for the time frame between {date_range[0]} and {date_range[1]}"

@@ -21,7 +21,7 @@ def load_page():
         last_month_start = last_month_end.replace(
             day=1)
         date_range = st.sidebar.date_input("Select Date Range", value=[
-                                           last_month_start, last_month_end], key="date_range")
+                                           last_month_start, today], key="date_range", max_value=today)
 
         query_date_filter = f"WHERE transactiondate BETWEEN '{date_range[0]}' AND '{date_range[1]}'" if date_range else ""
         date_range_text = f"for the time frame between {date_range[0]} and {date_range[1]}"

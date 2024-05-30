@@ -93,7 +93,7 @@ def get_Lebanon_data(query_date_filter):
             SUM(i.totalprice) AS total_sales,
             COUNT(DISTINCT i.transactionid) AS total_transactions
         FROM
-            FLORAOS.BLUE_SAGE.flattened_itemsv_blue_sage_04_28_2024 AS i
+            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
             JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
             JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
         {query_date_filter}
@@ -161,6 +161,7 @@ def get_customer_sales(query_date_filter):
         AND LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL
         ;
     """
+    #print(query)
     return get_data(query)
 
 
