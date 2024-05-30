@@ -15,7 +15,7 @@ from functions.functions import (
     get_budtender_transaction_data,
     display_popular_products_by_sales,
     display_popular_products_by_transactions,
-    get_Lebanon_data,
+    get_canton_data,
     display_inventory_aging
     )
 
@@ -215,11 +215,11 @@ def load_page():
                     SUM(i.totalprice) AS total_sales,
                     COUNT(DISTINCT i.transactionid) AS total_transactions
                     FROM
-                    FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
-                    JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
-                    JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+                    FLORAOS.KLUTCH_CANNABIS.DUTCHIE_TRANSACTIONS_FLT AS i
+                    JOIN FLORAOS.KLUTCH_CANNABIS.dutchie_inventory AS p ON i.productid = p.productid
+                    JOIN FLORAOS.KLUTCH_CANNABIS.dutchie_transactions AS t ON i.transactionid = t.transactionid
                     {query_date_filter}
-                    AND p.location = 'carthage'
+                    AND p.location = 'lorain'
                     GROUP BY
                     p.productname,
                     p.location
@@ -249,7 +249,7 @@ def load_page():
                 )
 
                 bar_chart.update_layout(
-                    title="Top Selling Products for Carthage",
+                    title="Top Selling Products for lorain",
                     xaxis_title="Product Name",
                     yaxis_title="Total Sales ($)",
                     xaxis_tickangle=45,
@@ -262,8 +262,8 @@ def load_page():
                     df)
 
                 st.markdown(
-                    "### :orange[Carthage] -  *Sales* and *Transactions* by Product")
-                with st.expander("Please expand to see the Carthage Sales and Product data"):
+                    "### :orange[lorain] -  *Sales* and *Transactions* by Product")
+                with st.expander("Please expand to see the lorain Sales and Product data"):
                     col = st.columns((1, 1, 1), gap='small')
                     with col[0]:
                         st.markdown(popular_sales_markdown)
@@ -273,23 +273,23 @@ def load_page():
                         st.dataframe(df)
 
                 st.markdown(
-                    "### :orange[Lebanon] -  *Sales* and *Transactions* by Product")
-                with st.expander("Please expand to see the Lebanon Sales and Product data"):
+                    "### :orange[canton] -  *Sales* and *Transactions* by Product")
+                with st.expander("Please expand to see the canton Sales and Product data"):
                     col = st.columns((1, 1, 1), gap='small')
 
-                    df_lebanon = get_Lebanon_data(query_date_filter)
-                    if df_lebanon is not None and not df_lebanon.empty:
+                    df_canton = get_canton_data(query_date_filter)
+                    if df_canton is not None and not df_canton.empty:
                         with col[0]:
                             st.markdown(
-                                display_popular_products_by_sales(df_lebanon))
+                                display_popular_products_by_sales(df_canton))
                         with col[1]:
                             st.markdown(
-                                display_popular_products_by_transactions(df_lebanon))
+                                display_popular_products_by_transactions(df_canton))
                         with col[2]:
-                            st.dataframe(df_lebanon)
+                            st.dataframe(df_canton)
                     else:
                         st.warning(
-                            "No data available for Lebanon for the selected date range.")
+                            "No data available for canton for the selected date range.")
 
             else:
                 st.warning("No data available for the selected date range.")
@@ -320,9 +320,9 @@ def load_page():
                             SUM(i.totalprice) AS total_sales,
                             COUNT(DISTINCT i.transactionid) AS total_transactions
                             FROM
-                            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
-                            JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
-                            JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+                            FLORAOS.KLUTCH_CANNABIS.DUTCHIE_TRANSACTIONS_FLT AS i
+                            JOIN FLORAOS.KLUTCH_CANNABIS.dutchie_inventory AS p ON i.productid = p.productid
+                            JOIN FLORAOS.KLUTCH_CANNABIS.dutchie_transactions AS t ON i.transactionid = t.transactionid
                             WHERE T.transactiondate BETWEEN '{date1_start}' AND '{date1_end}'
                             GROUP BY p.productname
                             ORDER BY total_sales DESC
@@ -335,9 +335,9 @@ def load_page():
                             SUM(i.totalprice) AS total_sales,
                             COUNT(DISTINCT i.transactionid) AS total_transactions
                             FROM
-                            FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
-                            JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
-                            JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
+                            FLORAOS.KLUTCH_CANNABIS.DUTCHIE_TRANSACTIONS_FLT AS i
+                            JOIN FLORAOS.KLUTCH_CANNABIS.dutchie_inventory AS p ON i.productid = p.productid
+                            JOIN FLORAOS.KLUTCH_CANNABIS.dutchie_transactions AS t ON i.transactionid = t.transactionid
                             WHERE T.transactiondate BETWEEN '{date2_start}' AND '{date2_end}'
                             GROUP BY p.productname
                             ORDER BY total_sales DESC

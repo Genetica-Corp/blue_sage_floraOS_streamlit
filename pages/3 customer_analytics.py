@@ -32,8 +32,8 @@ def get_customer_data(date_range):
                 COUNT(dt.transactionid) AS NumberOfTransactions,
                 SUM(dt.total) AS TotalRevenue,
                 AVG(dt.total) AS AverageRevenue
-            FROM FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS AS dt
-            INNER JOIN FLORAOS.BLUE_SAGE.DUTCHIE_CUSTOMERS AS dc
+            FROM FLORAOS.KLUTCH_CANNABIS.DUTCHIE_TRANSACTIONS AS dt
+            INNER JOIN FLORAOS.KLUTCH_CANNABIS.DUTCHIE_CUSTOMERS AS dc
                 ON dt.customerid = dc.customerid
             {query_date_filter_customer}
             GROUP BY
