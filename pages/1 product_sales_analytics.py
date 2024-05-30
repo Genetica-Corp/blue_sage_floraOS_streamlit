@@ -134,7 +134,7 @@ def load_page():
                     SUM(i.totalprice) AS total_sales,
                     COUNT(DISTINCT i.transactionid) AS total_transactions
                     FROM
-                    FLORAOS.BLUE_SAGE.DUeTCHIE_TRANSACTIONS_FLT AS i
+                    FLORAOS.BLUE_SAGE.DUTCHIE_TRANSACTIONS_FLT AS i
                     JOIN FLORAOS.BLUE_SAGE.dutchie_inventory AS p ON i.productid = p.productid
                     JOIN FLORAOS.BLUE_SAGE.dutchie_transactions AS t ON i.transactionid = t.transactionid
                     {query_date_filter}
