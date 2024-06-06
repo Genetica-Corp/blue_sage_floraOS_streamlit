@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit_shadcn_ui as ui
 import datetime
 import plotly.express as px
 from functions.functions import (get_weekly_profitability, 
